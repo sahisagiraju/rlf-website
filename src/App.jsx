@@ -10,10 +10,11 @@ import Donate from './pages/Donate';
 import Contact from './pages/Contact';
 import Blog from './pages/Blog';
 import Podcasts from './pages/Podcasts';
+import Events from './pages/Events';
 
 function App() {
   return (
-    <Router basename="/rlf-website">
+    <Router>
       <ScrollToTop />
       <Layout>
         <Routes>
@@ -24,6 +25,7 @@ function App() {
           <Route path="/donate" element={<Donate />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/podcasts" element={<Podcasts />} />
+          <Route path="/events" element={<Events />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </Layout>
