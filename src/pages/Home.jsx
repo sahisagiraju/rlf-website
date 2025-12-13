@@ -2,6 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Users, BookOpen, TrendingUp, Award, Target, ArrowRight, Sparkles } from 'lucide-react';
 import Button from '../components/ui/Button';
+import ImageCarousel from '../components/ui/ImageCarousel';
+import ImageGallery from '../components/ui/ImageGallery';
+import Testimonial from '../components/ui/Testimonial';
+import CountUp from '../components/ui/CountUp';
+import ParallaxSection from '../components/ui/ParallaxSection';
 
 const Home = () => {
     const focusAreas = [
@@ -44,17 +49,119 @@ const Home = () => {
     ];
 
     const stats = [
-        { number: '140+', label: 'High Schools', description: 'Partner schools in DFW' },
-        { number: '6+', label: 'Universities', description: 'College partnerships' },
-        { number: '1000+', label: 'Youth Served', description: 'Lives transformed' },
-        { number: '10+', label: 'Years', description: 'Of dedicated service' }
+        { number: 140, label: 'High Schools', description: 'Partner schools in DFW' },
+        { number: 6, label: 'Universities', description: 'College partnerships' },
+        { number: 1000, label: 'Youth Served', description: 'Lives transformed' },
+        { number: 10, label: 'Years', description: 'Of dedicated service' }
+    ];
+
+    const carouselImages = [
+        {
+            src: `${import.meta.env.BASE_URL}assets/imgs/hero-background.jpg`,
+            alt: 'Students at RLF program',
+            title: 'Empowering Youth',
+            description: 'Creating opportunities for success through mentorship and education'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/hero-group.jpg`,
+            alt: 'Community gathering',
+            title: 'Building Communities',
+            description: 'Bringing people together to make a lasting impact'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/team-stadium.jpg`,
+            alt: 'Team building event',
+            title: 'Growing Together',
+            description: 'Developing leadership skills through collaborative experiences'
+        }
+    ];
+
+    const galleryImages = [
+        {
+            src: `${import.meta.env.BASE_URL}assets/imgs/gallery-1.jpg`,
+            alt: 'RLF students engaged in learning',
+            title: 'Active Learning',
+            description: 'Students participating in educational workshops'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}assets/imgs/gallery-2.jpg`,
+            alt: 'Youth mentorship session',
+            title: 'Mentorship',
+            description: 'One-on-one guidance and support'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}assets/imgs/gallery-3.jpg`,
+            alt: 'Community service project',
+            title: 'Community Service',
+            description: 'Making a difference in our community'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}assets/imgs/gallery-4.jpg`,
+            alt: 'Student achievement',
+            title: 'Celebrating Success',
+            description: 'Recognizing student accomplishments'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}assets/imgs/gallery-5.jpg`,
+            alt: 'RLF workshop',
+            title: 'Skill Development',
+            description: 'Building essential life skills'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/prom-group.jpg`,
+            alt: 'Prom event',
+            title: 'Special Events',
+            description: 'Creating memorable experiences'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/back-to-school-haircut.jpg`,
+            alt: 'Back to school haircut event',
+            title: 'Back to School',
+            description: 'Supporting students for success'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/back-to-school-volunteer.jpg`,
+            alt: 'Volunteers helping students',
+            title: 'Volunteer Support',
+            description: 'Community members giving back'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/img-4645.jpg`,
+            alt: 'Student activities',
+            title: 'Youth Engagement',
+            description: 'Active participation in programs'
+        }
+    ];
+
+    const testimonials = [
+        {
+            quote: 'RLF changed my life. The mentorship I received helped me get into my dream college and taught me skills I use every day.',
+            name: 'Marcus Johnson',
+            role: 'College Student',
+            organization: 'University of Texas',
+            image: `${import.meta.env.BASE_URL}assets/imgs/gallery-2.jpg`
+        },
+        {
+            quote: 'Being a volunteer with RLF has been incredibly rewarding. Seeing these young people grow and succeed is amazing.',
+            name: 'Sarah Williams',
+            role: 'Volunteer Mentor',
+            organization: 'RLF Mentor Program',
+            image: `${import.meta.env.BASE_URL}assets/imgs/gallery-4.jpg`
+        },
+        {
+            quote: 'The entrepreneurship program taught me how to turn my ideas into reality. I now run my own small business!',
+            name: 'Jennifer Martinez',
+            role: 'Young Entrepreneur',
+            organization: 'RLF Graduate',
+            image: `${import.meta.env.BASE_URL}assets/imgs/gallery-3.jpg`
+        }
     ];
 
     return (
         <div className="min-h-screen">
             {/* Hero Section */}
             <section className="relative text-white overflow-hidden">
-                <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/imgs/hero-background.jpg')", backgroundPosition: "center 30%" }}></div>
+                <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${import.meta.env.BASE_URL}assets/imgs/hero-background.jpg')`, backgroundPosition: "center 30%" }}></div>
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 via-purple-900/70 to-pink-900/80"></div>
 
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
@@ -109,7 +216,7 @@ const Home = () => {
                         <div className="relative">
                             <div className="rounded-3xl shadow-2xl overflow-hidden">
                                 <img
-                                    src="/assets/imgs/mission-image.jpg"
+                                    src={`${import.meta.env.BASE_URL}assets/imgs/mission-image.jpg`}
                                     alt="Youth participating in RLF programs"
                                     className="w-full h-full object-cover aspect-[4/3]"
                                 />
@@ -152,10 +259,15 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Impact Stats */}
-            <section className="py-20 bg-gradient-to-br from-blue-600 to-purple-600 text-white">
+            {/* Impact Stats with CountUp */}
+            <ParallaxSection
+                backgroundImage={`${import.meta.env.BASE_URL}assets/imgs/hero-background.jpg`}
+                speed={0.3}
+                overlay="bg-gradient-to-br from-blue-900/90 via-purple-900/85 to-pink-900/90"
+                className="py-20"
+            >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-16 text-white">
                         <h2 className="text-4xl md:text-5xl font-bold mb-4">
                             Our Impact
                         </h2>
@@ -168,15 +280,15 @@ const Home = () => {
                         {stats.map((stat, index) => (
                             <div key={index} className="text-center animate-fade-in" style={{ animationDelay: `${index * 150}ms` }}>
                                 <div className="text-5xl md:text-6xl font-extrabold mb-2 text-yellow-300">
-                                    {stat.number}
+                                    <CountUp end={stat.number} suffix="+" duration={2500} />
                                 </div>
-                                <div className="text-xl font-semibold mb-1">{stat.label}</div>
+                                <div className="text-xl font-semibold mb-1 text-white">{stat.label}</div>
                                 <div className="text-sm text-blue-200">{stat.description}</div>
                             </div>
                         ))}
                     </div>
                 </div>
-            </section>
+            </ParallaxSection>
 
             {/* Volunteer Call to Action */}
             <section className="py-20 bg-white">
@@ -228,7 +340,7 @@ const Home = () => {
                         <div className="relative">
                             <div className="aspect-square rounded-3xl shadow-2xl overflow-hidden">
                                 <img
-                                    src="/assets/imgs/group-smiling.jpg"
+                                    src={`${import.meta.env.BASE_URL}assets/imgs/group-smiling.jpg`}
                                     alt="RLF Student Club - Building Future Leaders"
                                     className="w-full h-full object-cover"
                                 />
@@ -238,7 +350,25 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Photo Gallery */}
+            {/* Featured Carousel */}
+            <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+                            Our Programs in Action
+                        </h2>
+                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                            Explore the transformative experiences we create for youth
+                        </p>
+                    </div>
+
+                    <div className="h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+                        <ImageCarousel images={carouselImages} autoPlay={true} interval={5000} />
+                    </div>
+                </div>
+            </section>
+
+            {/* Interactive Photo Gallery */}
             <section className="py-20 bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12">
@@ -246,55 +376,27 @@ const Home = () => {
                             Our Impact in Action
                         </h2>
                         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                            See the difference we're making in the lives of young people across the Dallas-Fort Worth area
+                            Click any image to view it in full screen
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {/* Large featured image */}
-                        <div className="col-span-2 row-span-2">
-                            <div className="rounded-2xl overflow-hidden shadow-lg h-full hover:shadow-2xl transition-shadow duration-300">
-                                <img
-                                    src="/assets/imgs/gallery-1.jpg"
-                                    alt="RLF students engaged in learning activities"
-                                    className="w-full h-full object-cover object-center"
-                                />
-                            </div>
-                        </div>
+                    <ImageGallery images={galleryImages} columns={3} />
+                </div>
+            </section>
 
-                        {/* Smaller gallery images */}
-                        <div className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
-                            <img
-                                src="/assets/imgs/gallery-2.jpg"
-                                alt="Youth mentorship session"
-                                className="w-full h-full object-cover object-center aspect-square"
-                            />
-                        </div>
-
-                        <div className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
-                            <img
-                                src="/assets/imgs/gallery-3.jpg"
-                                alt="Community service project"
-                                className="w-full h-full object-cover object-center aspect-square"
-                            />
-                        </div>
-
-                        <div className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
-                            <img
-                                src="/assets/imgs/gallery-4.jpg"
-                                alt="Student achievement celebration"
-                                className="w-full h-full object-cover object-center aspect-square"
-                            />
-                        </div>
-
-                        <div className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
-                            <img
-                                src="/assets/imgs/gallery-5.jpg"
-                                alt="RLF workshop and training"
-                                className="w-full h-full object-cover object-center aspect-square"
-                            />
-                        </div>
+            {/* Testimonials */}
+            <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+                            Stories of Impact
+                        </h2>
+                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                            Hear from the students, mentors, and families whose lives have been transformed
+                        </p>
                     </div>
+
+                    <Testimonial testimonials={testimonials} />
                 </div>
             </section>
 

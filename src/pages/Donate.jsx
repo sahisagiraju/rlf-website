@@ -2,11 +2,63 @@ import React, { useState } from 'react';
 import Section from '../components/ui/Section';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import { Building2, CheckCircle } from 'lucide-react';
 
 const Donate = () => {
     const [donationType, setDonationType] = useState('one-time');
     const [selectedAmount, setSelectedAmount] = useState(null);
     const [customAmount, setCustomAmount] = useState('');
+    const [sponsorSubmitted, setSponsorSubmitted] = useState(false);
+    const [sponsorFormData, setSponsorFormData] = useState({
+        firstName: '',
+        lastName: '',
+        company: '',
+        industry: '',
+        phone: '',
+        website: '',
+        email: '',
+        investmentLevel: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: ''
+    });
+
+    const handleSponsorChange = (e) => {
+        setSponsorFormData({
+            ...sponsorFormData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSponsorSubmit = (e) => {
+        e.preventDefault();
+        console.log('Sponsor form submitted:', sponsorFormData);
+        setSponsorSubmitted(true);
+
+        // Reset after 3 seconds
+        setTimeout(() => {
+            setSponsorSubmitted(false);
+            setSponsorFormData({
+                firstName: '',
+                lastName: '',
+                company: '',
+                industry: '',
+                phone: '',
+                website: '',
+                email: '',
+                investmentLevel: '',
+                addressLine1: '',
+                addressLine2: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                country: ''
+            });
+        }, 3000);
+    };
 
     const donationAmounts = [25, 50, 100, 250, 500, 1000];
 
@@ -311,10 +363,287 @@ const Donate = () => {
                 </div>
             </Section>
 
-            {/* Testimonial */}
-            <Section className="py-16">
+            {/* Corporate Sponsorship Form */}
+            <Section className="py-16 bg-white">
                 <div className="max-w-4xl mx-auto">
-                    <Card className="bg-gradient-to-br from-purple-50 to-pink-50">
+                    <div className="text-center mb-12">
+                        <div className="flex justify-center mb-6">
+                            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
+                                <Building2 className="w-8 h-8 text-white" />
+                            </div>
+                        </div>
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                            Become a Corporate Sponsor
+                        </h2>
+                        <p className="text-lg text-gray-600">
+                            Partner with us to create meaningful impact while enhancing your organization's community engagement
+                        </p>
+                    </div>
+
+                    <Card className="shadow-2xl">
+                        {!sponsorSubmitted ? (
+                            <form onSubmit={handleSponsorSubmit} className="space-y-6">
+                                {/* Name Row */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            First Name *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="firstName"
+                                            required
+                                            value={sponsorFormData.firstName}
+                                            onChange={handleSponsorChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="John"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Last Name *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="lastName"
+                                            required
+                                            value={sponsorFormData.lastName}
+                                            onChange={handleSponsorChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Doe"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Company & Industry */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Company *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="company"
+                                            required
+                                            value={sponsorFormData.company}
+                                            onChange={handleSponsorChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Your Company"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Industry *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="industry"
+                                            required
+                                            value={sponsorFormData.industry}
+                                            onChange={handleSponsorChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Technology, Finance, etc."
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Phone & Website */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Phone *
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            name="phone"
+                                            required
+                                            value={sponsorFormData.phone}
+                                            onChange={handleSponsorChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="(123) 456-7890"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Website
+                                        </label>
+                                        <input
+                                            type="url"
+                                            name="website"
+                                            value={sponsorFormData.website}
+                                            onChange={handleSponsorChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="https://www.example.com"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Email & Investment Level */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Email *
+                                        </label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            required
+                                            value={sponsorFormData.email}
+                                            onChange={handleSponsorChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="john@company.com"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Estimated Investment Level *
+                                        </label>
+                                        <select
+                                            name="investmentLevel"
+                                            required
+                                            value={sponsorFormData.investmentLevel}
+                                            onChange={handleSponsorChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        >
+                                            <option value="">Select Amount</option>
+                                            <option value="$100,000-$500,000">$100,000-$500,000</option>
+                                            <option value="$500,000-$1,000,000">$500,000-$1,000,000</option>
+                                            <option value="$1,000,000+">$1,000,000+</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {/* Headquarters Address */}
+                                <div>
+                                    <h3 className="text-lg font-bold text-gray-900 mb-4">Headquarters Address</h3>
+                                </div>
+
+                                {/* Address Line 1 */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Address Line 1 *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="addressLine1"
+                                        required
+                                        value={sponsorFormData.addressLine1}
+                                        onChange={handleSponsorChange}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="Street address"
+                                    />
+                                </div>
+
+                                {/* Address Line 2 */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Address Line 2
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="addressLine2"
+                                        value={sponsorFormData.addressLine2}
+                                        onChange={handleSponsorChange}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="Suite, floor, etc. (optional)"
+                                    />
+                                </div>
+
+                                {/* City, State, Zip */}
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            City *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="city"
+                                            required
+                                            value={sponsorFormData.city}
+                                            onChange={handleSponsorChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Dallas"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            State *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="state"
+                                            required
+                                            value={sponsorFormData.state}
+                                            onChange={handleSponsorChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="TX"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Zip Code *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="zipCode"
+                                            required
+                                            value={sponsorFormData.zipCode}
+                                            onChange={handleSponsorChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="75001"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Country */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Country *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="country"
+                                        required
+                                        value={sponsorFormData.country}
+                                        onChange={handleSponsorChange}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="United States"
+                                    />
+                                </div>
+
+                                {/* Submit Button */}
+                                <div className="pt-4">
+                                    <button
+                                        type="submit"
+                                        className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-colors shadow-lg hover:shadow-xl"
+                                    >
+                                        Submit Sponsorship Inquiry
+                                    </button>
+                                </div>
+                            </form>
+                        ) : (
+                            <div className="text-center py-12">
+                                <div className="mb-6 flex justify-center">
+                                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
+                                        <CheckCircle className="w-12 h-12 text-green-600" />
+                                    </div>
+                                </div>
+                                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                                    Thank You for Your Interest!
+                                </h3>
+                                <p className="text-gray-600 text-lg">
+                                    Our team will review your information and contact you shortly at {sponsorFormData.email}
+                                </p>
+                            </div>
+                        )}
+                    </Card>
+                </div>
+            </Section>
+
+            {/* Testimonial */}
+            <Section className="py-16 bg-gradient-to-br from-purple-50 to-pink-50">
+                <div className="max-w-4xl mx-auto">
+                    <Card className="bg-white">
                         <div className="text-center">
                             <div className="text-5xl mb-4">💬</div>
                             <blockquote className="text-xl text-gray-700 italic mb-4">

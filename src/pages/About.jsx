@@ -1,7 +1,48 @@
 import React from 'react';
 import { Target, Eye, Heart, Users, Award, TrendingUp, MapPin, Calendar } from 'lucide-react';
+import ImageGallery from '../components/ui/ImageGallery';
+import CountUp from '../components/ui/CountUp';
 
 const About = () => {
+    const teamPhotos = [
+        {
+            src: `${import.meta.env.BASE_URL}assets/imgs/group-smiling.jpg`,
+            alt: 'RLF team members',
+            title: 'Our Team',
+            description: 'Dedicated professionals committed to youth empowerment'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/hero-group.jpg`,
+            alt: 'Community event',
+            title: 'Community Engagement',
+            description: 'Building strong relationships in our community'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/volunteer-mentor.png`,
+            alt: 'Mentors and students',
+            title: 'Mentorship in Action',
+            description: 'Creating meaningful connections'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}assets/imgs/gallery-2.jpg`,
+            alt: 'Youth workshop',
+            title: 'Youth Development',
+            description: 'Empowering the next generation'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/team-stadium.jpg`,
+            alt: 'Team at stadium',
+            title: 'Team Building',
+            description: 'Together we achieve more'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/back-to-school-volunteer.jpg`,
+            alt: 'Volunteers helping',
+            title: 'Volunteer Impact',
+            description: 'Community members making a difference'
+        }
+    ];
+
     const values = [
         {
             icon: Heart,
@@ -75,7 +116,7 @@ const About = () => {
                         <div className="relative">
                             <div className="aspect-square rounded-3xl shadow-2xl overflow-hidden">
                                 <img
-                                    src="/assets/imgs/about-image.jpg"
+                                    src={`${import.meta.env.BASE_URL}assets/imgs/about-image.jpg`}
                                     alt="Ronnia Langston Foundation - 10+ Years of Impact"
                                     className="w-full h-full object-cover"
                                 />
@@ -195,6 +236,21 @@ const About = () => {
                 </div>
             </section>
 
+            {/* Team Gallery */}
+            <section className="py-20 bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+                            Our People & Community
+                        </h2>
+                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                            Meet the dedicated team and volunteers who make our mission possible
+                        </p>
+                    </div>
+                    <ImageGallery images={teamPhotos} columns={3} />
+                </div>
+            </section>
+
             {/* Service Area */}
             <section className="py-20 bg-gradient-to-br from-blue-600 to-purple-600 text-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -207,11 +263,15 @@ const About = () => {
                         </p>
                         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
                             <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-                                <div className="text-4xl font-bold text-yellow-300 mb-2">140+</div>
+                                <div className="text-4xl font-bold text-yellow-300 mb-2">
+                                    <CountUp end={140} suffix="+" duration={2500} />
+                                </div>
                                 <div className="text-lg font-semibold">High Schools</div>
                             </div>
                             <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-                                <div className="text-4xl font-bold text-yellow-300 mb-2">6+</div>
+                                <div className="text-4xl font-bold text-yellow-300 mb-2">
+                                    <CountUp end={6} suffix="+" duration={2500} />
+                                </div>
                                 <div className="text-lg font-semibold">Universities</div>
                             </div>
                             <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">

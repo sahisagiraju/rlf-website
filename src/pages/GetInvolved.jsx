@@ -2,9 +2,17 @@ import React, { useState } from 'react';
 import Section from '../components/ui/Section';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import ApplicationModal from '../components/ui/ApplicationModal';
 
 const GetInvolved = () => {
     const [activeTab, setActiveTab] = useState('volunteer');
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedProgram, setSelectedProgram] = useState('');
+
+    const openModal = (programName) => {
+        setSelectedProgram(programName);
+        setModalOpen(true);
+    };
 
     const volunteerOpportunities = [
         {
@@ -213,7 +221,10 @@ const GetInvolved = () => {
                                             ))}
                                         </ul>
                                     </div>
-                                    <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                                    <Button
+                                        onClick={() => openModal(opportunity.title)}
+                                        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                                    >
                                         Apply to Volunteer
                                     </Button>
                                 </Card>
@@ -270,6 +281,7 @@ const GetInvolved = () => {
                                         ))}
                                     </ul>
                                     <Button
+                                        onClick={() => openModal(`${level.level} Partnership`)}
                                         className={`w-full bg-gradient-to-r ${level.color} hover:opacity-90`}
                                     >
                                         Become a Partner
@@ -326,7 +338,11 @@ const GetInvolved = () => {
                                             </li>
                                         ))}
                                     </ul>
-                                    <Button variant="outline" className="w-full">
+                                    <Button
+                                        onClick={() => openModal(position.role)}
+                                        variant="outline"
+                                        className="w-full"
+                                    >
                                         Apply Now
                                     </Button>
                                 </Card>
@@ -388,6 +404,13 @@ const GetInvolved = () => {
                     </div>
                 </Section>
             )}
+
+            {/* Application Modal */}
+            <ApplicationModal
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                programTitle={selectedProgram}
+            />
         </div>
     );
 };

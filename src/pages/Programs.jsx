@@ -2,8 +2,49 @@ import React from 'react';
 import Section from '../components/ui/Section';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import ImageGallery from '../components/ui/ImageGallery';
+import CountUp from '../components/ui/CountUp';
 
 const Programs = () => {
+    const programGallery = [
+        {
+            src: `${import.meta.env.BASE_URL}images/volunteer-mentor.png`,
+            alt: 'Mentorship session',
+            title: 'Youth Mentorship',
+            description: 'Building meaningful connections'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/community-service.png`,
+            alt: 'Community service',
+            title: 'Community Impact',
+            description: 'Serving our community together'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/img-4645.jpg`,
+            alt: 'Academic support',
+            title: 'Academic Excellence',
+            description: 'Supporting student success'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/team-stadium.jpg`,
+            alt: 'Leadership development',
+            title: 'Leadership Training',
+            description: 'Building future leaders'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/back-to-school-volunteer.jpg`,
+            alt: 'Volunteer activities',
+            title: 'Volunteer Programs',
+            description: 'Making a difference together'
+        },
+        {
+            src: `${import.meta.env.BASE_URL}images/prom-group.jpg`,
+            alt: 'Special events',
+            title: 'Youth Events',
+            description: 'Creating memorable experiences'
+        }
+    ];
+
     const programs = [
         {
             id: 1,
@@ -147,22 +188,37 @@ const Programs = () => {
                 </div>
             </Section>
 
+            {/* Program Gallery */}
+            <Section className="py-16 bg-white">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                            See Our Programs in Action
+                        </h2>
+                        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                            Explore the transformative experiences happening in our programs every day
+                        </p>
+                    </div>
+                    <ImageGallery images={programGallery} columns={3} />
+                </div>
+            </Section>
+
             {/* Impact Stats */}
-            <Section className="bg-gradient-to-br from-gray-900 to-gray-800 text-black py-16">
+            <Section className="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-16">
                 <div className="max-w-6xl mx-auto">
                     <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
                         Program Impact
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                         {[
-                            { number: "500+", label: "Youth Served Annually" },
-                            { number: "95%", label: "Program Satisfaction" },
-                            { number: "1000+", label: "Mentoring Hours" },
-                            { number: "85%", label: "College Enrollment Rate" }
+                            { number: 500, label: "Youth Served Annually" },
+                            { number: 95, label: "Program Satisfaction" },
+                            { number: 1000, label: "Mentoring Hours" },
+                            { number: 85, label: "College Enrollment Rate" }
                         ].map((stat, index) => (
                             <div key={index} className="text-center">
                                 <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
-                                    {stat.number}
+                                    <CountUp end={stat.number} suffix={stat.label.includes('%') ? '%' : '+'} duration={2500} />
                                 </div>
                                 <div className="text-gray-300 text-lg">
                                     {stat.label}
