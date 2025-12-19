@@ -1,46 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from '../components/ui/Calendar';
 import Section from '../components/ui/Section';
+import client from '../lib/sanityClient';
 
 const Events = () => {
-  // Sample events data
-  const events = [
-    {
-      date: '2025-12-15',
-      title: 'Community Outreach',
-      color: 'bg-green-100 text-green-800'
-    },
-    {
-      date: '2025-12-20',
-      title: 'Volunteer Training',
-      color: 'bg-purple-100 text-purple-800'
-    },
-    {
-      date: '2025-12-25',
-      title: 'Holiday Celebration',
-      color: 'bg-red-100 text-red-800'
-    },
-    {
-      date: '2025-12-12',
-      title: 'Team Meeting',
-      color: 'bg-blue-100 text-blue-800'
-    },
-    {
-      date: '2025-12-12',
-      title: 'Workshop',
-      color: 'bg-yellow-100 text-yellow-800'
-    },
-    {
-      date: '2026-01-05',
-      title: 'New Year Kickoff',
-      color: 'bg-indigo-100 text-indigo-800'
-    },
-    {
-      date: '2026-01-10',
-      title: 'Fundraising Gala',
-      color: 'bg-pink-100 text-pink-800'
-    }
-  ];
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const q = `*[_type == "event" && defined(start)] | order(start asc){
+      _id,
+      title,
+      start,
+      end,
+      allDay,
+      location,
+      category,
+      colorClass,
+      externalLink
+    }`;
+
+    client.fetch(q).then((data) => {
+      // Map Sanity events to simple calendar entries. Expand multi-day events into each date if needed.
+      const mapped = data.flatMap((ev) => {
+        const startDate = ev.start ? new Date(ev.start) : null;
+        const endDate = ev.end ? new Date(ev.end) : startDate;
+        if (!startDate) return [];
+
+        const dates = [];
+        // If event spans multiple days, add an entry for each day in the range (inclusive)
+        const cur = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+        const last = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+        while (cur <= last) {
+          const dateStr = cur.toISOString().slice(0, 10);
+          dates.push({
+            date: dateStr,
+            title: ev.title,
+            color: ev.colorClass || (ev.category === 'Outreach' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'),
+            meta: ev,
+          });
+          cur.setDate(cur.getDate() + 1);
+        }
+
+        return dates;
+      });
+
+      setEvents(mapped);
+    }).catch((err) => console.error('Sanity fetch error (events):', err));
+  }, []);
 
   return (
     <div className="min-h-screen">

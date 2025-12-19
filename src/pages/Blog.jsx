@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, User, Tag, Clock, ArrowRight, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import client, { urlFor } from '../lib/sanityClient';
 
 const Blog = () => {
     const [selectedCategory, setSelectedCategory] = useState('All');
@@ -8,74 +9,47 @@ const Blog = () => {
 
     const categories = ['All', 'Youth Development', 'Success Stories', 'Events', 'Community Impact', 'Tips & Advice'];
 
-    const blogPosts = [
-        {
-            id: 1,
-            title: 'Empowering Youth Through Financial Literacy',
-            excerpt: 'Learn how our financial literacy program is helping young people build a solid foundation for their financial future...',
-            category: 'Youth Development',
-            author: 'Sarah Johnson',
-            date: 'December 10, 2024',
-            readTime: '5 min read',
-            image: `${import.meta.env.BASE_URL}assets/imgs/gallery-1.jpg`,
-            featured: true
-        },
-        {
-            id: 2,
-            title: 'Success Story: From Mentee to College Graduate',
-            excerpt: 'Meet Marcus, whose journey from high school student to university success showcases the power of mentorship...',
-            category: 'Success Stories',
-            author: 'Michael Chen',
-            date: 'December 8, 2024',
-            readTime: '7 min read',
-            image: `${import.meta.env.BASE_URL}assets/imgs/gallery-2.jpg`,
-            featured: true
-        },
-        {
-            id: 3,
-            title: 'Back to School Event 2024 Recap',
-            excerpt: 'Our annual back-to-school event brought together hundreds of students, volunteers, and community members...',
-            category: 'Events',
-            author: 'Jessica Williams',
-            date: 'December 5, 2024',
-            readTime: '4 min read',
-            image: `${import.meta.env.BASE_URL}images/back-to-school-volunteer.jpg`,
-            featured: false
-        },
-        {
-            id: 4,
-            title: 'Building Leadership Skills in Young People',
-            excerpt: 'Discover the key components of our leadership development program and how it transforms lives...',
-            category: 'Youth Development',
-            author: 'David Martinez',
-            date: 'December 3, 2024',
-            readTime: '6 min read',
-            image: `${import.meta.env.BASE_URL}images/team-stadium.jpg`,
-            featured: false
-        },
-        {
-            id: 5,
-            title: 'Community Service: Making a Difference Together',
-            excerpt: 'Our community service initiatives connect youth with opportunities to give back and develop character...',
-            category: 'Community Impact',
-            author: 'Angela Davis',
-            date: 'November 30, 2024',
-            readTime: '5 min read',
-            image: `${import.meta.env.BASE_URL}images/community-service.png`,
-            featured: false
-        },
-        {
-            id: 6,
-            title: '10 Tips for Parents Supporting Youth Development',
-            excerpt: 'Expert advice on how parents can support their children\'s growth and development...',
-            category: 'Tips & Advice',
-            author: 'Dr. Robert Lee',
-            date: 'November 28, 2024',
-            readTime: '8 min read',
-            image: `${import.meta.env.BASE_URL}assets/imgs/gallery-4.jpg`,
-            featured: false
-        }
-    ];
+    const [blogPosts, setBlogPosts] = useState([]);
+
+    useEffect(() => {
+        const q = `*[_type == "post" && defined(slug.current)] | order(publishedAt desc){
+            _id,
+            title,
+            "slug": slug.current,
+            "author": author->name,
+            publishedAt,
+            mainImage,
+            body,
+            "categories": categories[]->title
+        }`;
+
+        client.fetch(q).then((data) => {
+            const mapped = data.map((p, idx) => ({
+                id: p._id || idx,
+                title: p.title,
+                excerpt: (() => {
+                    if (p.body && Array.isArray(p.body) && p.body.length) {
+                        const firstBlock = p.body.find(b => b._type === 'block');
+                        if (firstBlock && firstBlock.children) {
+                            return firstBlock.children.map(c => c.text).join(' ').slice(0, 180);
+                        }
+                    }
+                    return '';
+                })(),
+                category: (p.categories && p.categories[0]) || 'General',
+                author: p.author || 'RLF',
+                date: p.publishedAt ? new Date(p.publishedAt).toLocaleDateString() : '',
+                readTime: '5 min read',
+                image: p.mainImage ? urlFor(p.mainImage).width(1200).auto('format').url() : `${import.meta.env.BASE_URL}assets/imgs/gallery-1.jpg`,
+                featured: false,
+                slug: p.slug
+            }));
+
+            // Mark first two as featured for visual parity
+            mapped.forEach((m, i) => { if (i < 2) m.featured = true });
+            setBlogPosts(mapped);
+        }).catch(err => console.error('Sanity fetch error (posts):', err));
+    }, []);
 
     const filteredPosts = blogPosts.filter(post => {
         const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;

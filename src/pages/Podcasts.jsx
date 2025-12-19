@@ -1,79 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Play, Calendar, Clock, Headphones, Youtube } from 'lucide-react';
+import client, { urlFor } from '../lib/sanityClient';
 
 const Podcasts = () => {
     const [selectedCategory, setSelectedCategory] = useState('All');
 
     const categories = ['All', 'Youth Stories', 'Expert Interviews', 'Community Leaders', 'Educational'];
 
-    const podcasts = [
-        {
-            id: 1,
-            title: 'The Power of Mentorship: Transforming Lives One Connection at a Time',
-            description: 'Join us as we explore the profound impact of mentorship on youth development with special guests who have experienced transformation firsthand.',
-            category: 'Expert Interviews',
-            date: 'December 12, 2024',
-            duration: '45:23',
-            youtubeId: 'dXMrYQKbbOo', // Replace with actual YouTube video ID
-            featured: true,
-            thumbnail: `${import.meta.env.BASE_URL}assets/imgs/gallery-1.jpg`
-        },
-        {
-            id: 2,
-            title: 'From Student to Leader: A Success Story',
-            description: 'Meet Marcus Johnson, who shares his journey from struggling high school student to successful college graduate and youth mentor.',
-            category: 'Youth Stories',
-            date: 'December 8, 2024',
-            duration: '32:15',
-            youtubeId: 'dXMrYQKbbOo', // Replace with actual YouTube video ID
-            featured: true,
-            thumbnail: `${import.meta.env.BASE_URL}assets/imgs/gallery-2.jpg`
-        },
-        {
-            id: 3,
-            title: 'Building Financial Literacy in Young People',
-            description: 'Financial expert Sarah Williams discusses practical strategies for teaching financial literacy to youth.',
-            category: 'Educational',
-            date: 'December 5, 2024',
-            duration: '38:42',
-            youtubeId: 'dXMrYQKbbOo', // Replace with actual YouTube video ID
-            featured: false,
-            thumbnail: `${import.meta.env.BASE_URL}assets/imgs/gallery-3.jpg`
-        },
-        {
-            id: 4,
-            title: 'Community Impact: Working Together for Change',
-            description: 'Community leaders share stories about collaborative efforts to empower youth in Dallas-Fort Worth.',
-            category: 'Community Leaders',
-            date: 'December 1, 2024',
-            duration: '41:18',
-            youtubeId: 'dXMrYQKbbOo', // Replace with actual YouTube video ID
-            featured: false,
-            thumbnail: `${import.meta.env.BASE_URL}images/community-service.png`
-        },
-        {
-            id: 5,
-            title: 'Entrepreneurship for Teens: Starting Your First Business',
-            description: 'Young entrepreneurs share their experiences starting businesses while still in high school.',
-            category: 'Youth Stories',
-            date: 'November 28, 2024',
-            duration: '29:55',
-            youtubeId: 'dXMrYQKbbOo', // Replace with actual YouTube video ID
-            featured: false,
-            thumbnail: `${import.meta.env.BASE_URL}assets/imgs/gallery-4.jpg`
-        },
-        {
-            id: 6,
-            title: 'The Role of Arts in Youth Development',
-            description: 'Exploring how arts programs contribute to personal growth and self-expression in young people.',
-            category: 'Educational',
-            date: 'November 25, 2024',
-            duration: '36:47',
-            youtubeId: 'dXMrYQKbbOo', // Replace with actual YouTube video ID
-            featured: false,
-            thumbnail: `${import.meta.env.BASE_URL}assets/imgs/gallery-5.jpg`
-        }
-    ];
+    const [podcasts, setPodcasts] = useState([]);
+
+    useEffect(() => {
+        const q = `*[_type == "podcast"] | order(publishedAt desc){
+            _id,
+            title,
+            episodeNumber,
+            duration,
+            publishedAt,
+            summary,
+            description,
+            coverImage,
+            audioFile,
+            "categories": categories[]->title,
+            "hosts": hosts[]->name,
+            "guests": guests[]->name,
+            externalLinks
+        }`;
+
+        client.fetch(q).then((data) => {
+            const mapped = data.map((p, idx) => ({
+                id: p._id || idx,
+                title: p.title,
+                description: p.summary || (p.description && Array.isArray(p.description) ? (p.description[0]?.children?.map(c => c.text).join(' ') || '') : ''),
+                category: p.categories && p.categories.length ? p.categories[0] : 'General',
+                date: p.publishedAt ? new Date(p.publishedAt).toLocaleDateString() : '',
+                duration: p.duration || '',
+                youtubeId: (() => {
+                    // try to detect a youtube id in externalLinks
+                    if (p.externalLinks && p.externalLinks.length) {
+                        const you = p.externalLinks.find(l => l.url && l.url.includes('youtube.com') || (l.url && l.url.includes('youtu.be')));
+                        if (you) {
+                            const url = you.url;
+                            const m = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+                            return m ? m[1] : null;
+                        }
+                    }
+                    return null;
+                })(),
+                featured: idx < 2,
+                thumbnail: p.coverImage ? urlFor(p.coverImage).width(1200).auto('format').url() : `${import.meta.env.BASE_URL}assets/imgs/gallery-1.jpg`,
+                raw: p,
+            }));
+
+            setPodcasts(mapped);
+        }).catch(err => console.error('Sanity fetch error (podcasts):', err));
+    }, []);
 
     const filteredPodcasts = podcasts.filter(podcast =>
         selectedCategory === 'All' || podcast.category === selectedCategory
