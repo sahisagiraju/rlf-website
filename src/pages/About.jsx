@@ -74,6 +74,63 @@ const About = () => {
         { year: '2024', event: '140+ School Partners', description: 'Now serving students across 140+ high schools and 6 universities' }
     ];
 
+    const awards = [
+        {
+            id: '1',
+            title: 'Excellence in Youth Development',
+            description: 'Recognized for outstanding commitment to empowering young people in our community.',
+            year: '2023',
+            organization: 'Community Impact Award',
+            iconColor: 'from-yellow-400 to-orange-500',
+            cardColor: 'from-blue-50 to-purple-50'
+        },
+        {
+            id: '2',
+            title: 'Nonprofit of the Year',
+            description: 'Honored for exceptional service and transformative impact on youth across the DFW area.',
+            year: '2022',
+            organization: 'Dallas Business Journal',
+            iconColor: 'from-blue-500 to-cyan-500',
+            cardColor: 'from-purple-50 to-pink-50'
+        },
+        {
+            id: '3',
+            title: 'Innovation in Education',
+            description: 'Celebrated for innovative approaches to mentoring and academic support programs.',
+            year: '2021',
+            organization: 'Education Excellence Award',
+            iconColor: 'from-green-500 to-emerald-500',
+            cardColor: 'from-green-50 to-teal-50'
+        },
+        {
+            id: '4',
+            title: 'Community Partnership Excellence',
+            description: 'Acknowledged for building strong partnerships with schools and community organizations.',
+            year: '2020',
+            organization: 'Partnership Award',
+            iconColor: 'from-orange-500 to-red-500',
+            cardColor: 'from-orange-50 to-red-50'
+        },
+        {
+            id: '5',
+            title: 'Volunteer Program of the Year',
+            description: 'Recognized for exceptional volunteer engagement and community service initiatives.',
+            year: '2019',
+            organization: 'Volunteer Excellence Award',
+            iconColor: 'from-indigo-500 to-purple-500',
+            cardColor: 'from-indigo-50 to-blue-50'
+        },
+        {
+            id: '6',
+            title: 'Financial Literacy Excellence',
+            description: 'Honored for outstanding financial literacy education programs for youth.',
+            year: '2018',
+            organization: 'Financial Education Award',
+            iconColor: 'from-pink-500 to-rose-500',
+            cardColor: 'from-pink-50 to-rose-50'
+        }
+    ];
+
     return (
         <div className="min-h-screen">
             {/* Hero Section */}
@@ -94,9 +151,9 @@ const About = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid md:grid-cols-2 gap-12 items-center">
                         <div>
-                            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-full font-semibold text-sm mb-6">
-                                <Calendar className="w-4 h-4" />
-                                Our Story
+                            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-full font-semibold text-sm mb-6 whitespace-nowrap">
+                                <Calendar className="w-4 h-4 flex-shrink-0" />
+                                <span>Our Story</span>
                             </div>
                             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
                                 A Foundation Built on Hope
@@ -114,11 +171,11 @@ const About = () => {
                             </div>
                         </div>
                         <div className="relative">
-                            <div className="aspect-square rounded-3xl shadow-2xl overflow-hidden">
+                            <div className="rounded-3xl shadow-2xl overflow-hidden">
                                 <img
                                     src={`${import.meta.env.BASE_URL}assets/imgs/about-image.jpg`}
                                     alt="Ronnia Langston Foundation - 10+ Years of Impact"
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-auto object-contain"
                                 />
                             </div>
                         </div>
@@ -248,6 +305,42 @@ const About = () => {
                         </p>
                     </div>
                     <ImageGallery images={teamPhotos} columns={3} />
+                </div>
+            </section>
+
+            {/* Awards Section */}
+            <section className="py-20 bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+                            Awards & Recognition
+                        </h2>
+                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                            Honored to be recognized for our commitment to youth empowerment and community impact
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {awards.map((award) => (
+                            <div 
+                                key={award.id} 
+                                className={`bg-gradient-to-br ${award.cardColor} rounded-2xl p-8 border border-gray-100 hover:shadow-xl transition-shadow duration-300`}
+                            >
+                                <div className={`w-16 h-16 bg-gradient-to-br ${award.iconColor} rounded-xl flex items-center justify-center mb-6`}>
+                                    <Award className="w-8 h-8 text-white" />
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                                    {award.title}
+                                </h3>
+                                <p className="text-gray-600 mb-4">
+                                    {award.description}
+                                </p>
+                                <p className="text-sm text-gray-500 font-semibold">
+                                    {award.year} • {award.organization}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </section>
 

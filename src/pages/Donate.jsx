@@ -5,7 +5,6 @@ import Button from '../components/ui/Button';
 import { Building2, CheckCircle } from 'lucide-react';
 
 const Donate = () => {
-    const [donationType, setDonationType] = useState('one-time');
     const [selectedAmount, setSelectedAmount] = useState(null);
     const [customAmount, setCustomAmount] = useState('');
     const [sponsorSubmitted, setSponsorSubmitted] = useState(false);
@@ -149,29 +148,6 @@ const Donate = () => {
                             </p>
                         </div>
 
-                        {/* Donation Type Toggle */}
-                        <div className="flex justify-center gap-4 mb-8">
-                            <button
-                                onClick={() => setDonationType('one-time')}
-                                className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${donationType === 'one-time'
-                                        ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg scale-105'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
-                            >
-                                One-Time
-                            </button>
-                            <button
-                                onClick={() => setDonationType('monthly')}
-                                className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${donationType === 'monthly'
-                                        ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg scale-105'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
-                            >
-                                Monthly
-                                <span className="ml-2 text-xs bg-white/20 px-2 py-1 rounded-full">Sustaining</span>
-                            </button>
-                        </div>
-
                         {/* Amount Selection */}
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                             {donationAmounts.map(amount => (
@@ -212,13 +188,26 @@ const Donate = () => {
                         </div>
 
                         {/* Donate Button */}
-                        <Button
-                            size="lg"
-                            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-xl py-6"
-                            disabled={!selectedAmount && !customAmount}
-                        >
-                            {donationType === 'monthly' ? 'Start Monthly Donation' : 'Donate Now'}
-                        </Button>
+                        {(() => {
+                            const amount = selectedAmount || (customAmount ? parseFloat(customAmount) : null);
+                            const amountInCents = amount ? Math.round(amount * 100) : 1500; // Default to $15 if no amount selected
+                            const stripeUrl = `https://buy.stripe.com/7sIcPh8ff2UW4V2145?__prefilled_amount=${amountInCents}`;
+                            
+                            return (
+                                <a
+                                    href={stripeUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`inline-flex items-center justify-center w-full px-6 py-6 rounded-xl font-bold text-xl transition-all duration-300 ${
+                                        !selectedAmount && !customAmount
+                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none'
+                                            : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl'
+                                    }`}
+                                >
+                                    Donate Now
+                                </a>
+                            );
+                        })()}
 
                         <p className="text-center text-sm text-gray-500 mt-4">
                             🔒 Secure payment processing • Tax-deductible donation
@@ -254,56 +243,6 @@ const Donate = () => {
                                 </p>
                             </Card>
                         ))}
-                    </div>
-                </div>
-            </Section>
-
-            {/* Monthly Giving Benefits */}
-            <Section className="py-16 bg-gradient-to-br from-purple-600 to-pink-600 text-white">
-                <div className="max-w-5xl mx-auto">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                            Join Our Sustaining Circle
-                        </h2>
-                        <p className="text-xl opacity-90">
-                            Monthly donors provide the stable foundation that powers our programs year-round
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {[
-                            {
-                                icon: "💝",
-                                title: "Consistent Impact",
-                                description: "Your monthly gift ensures continuous support for youth programs"
-                            },
-                            {
-                                icon: "📊",
-                                title: "Exclusive Updates",
-                                description: "Receive special impact reports and behind-the-scenes stories"
-                            },
-                            {
-                                icon: "🎯",
-                                title: "Simplified Giving",
-                                description: "Set it once and make a difference every month automatically"
-                            }
-                        ].map((benefit, index) => (
-                            <div key={index} className="text-center">
-                                <div className="text-5xl mb-4">{benefit.icon}</div>
-                                <h3 className="text-xl font-bold mb-2">{benefit.title}</h3>
-                                <p className="opacity-90">{benefit.description}</p>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="text-center mt-12">
-                        <Button
-                            size="lg"
-                            className="bg-white text-purple-600 hover:bg-gray-100"
-                            onClick={() => setDonationType('monthly')}
-                        >
-                            Become a Monthly Donor
-                        </Button>
                     </div>
                 </div>
             </Section>
@@ -651,7 +590,7 @@ const Donate = () => {
                                 Seeing the direct impact on young lives in our community is truly inspiring."
                             </blockquote>
                             <p className="font-semibold text-gray-900">— Sarah Johnson</p>
-                            <p className="text-gray-600">Monthly Donor since 2020</p>
+                            <p className="text-gray-600">Donor since 2020</p>
                         </div>
                     </Card>
                 </div>
